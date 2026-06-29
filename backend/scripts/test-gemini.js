@@ -2,7 +2,7 @@
 // Uso: node scripts/test-gemini.js
 
 import "dotenv/config";
-import { chamarGiovanna } from "../src/ia/gemini.js";
+import { chamarIA } from "../src/ia/gemini.js";
 
 const SYSTEM_PROMPT = `Você é a Giovanna, consultora virtual da GIGACRED Correspondente.
 Sua função é qualificar leads que querem antecipar FGTS.
@@ -40,7 +40,7 @@ const novaMsg = "Oi! vi seu anuncio, quanto consigo de FGTS?";
 console.log(`Chamando Giovanna com modelo ${process.env.GEMINI_MODEL || "gemini-1.5-flash"}...\n`);
 
 try {
-  const r = await chamarGiovanna({
+  const r = await chamarIA({
     systemPrompt: SYSTEM_PROMPT,
     contexto,
     novaMensagem: novaMsg,

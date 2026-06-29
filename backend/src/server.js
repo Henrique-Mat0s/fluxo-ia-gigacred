@@ -7,6 +7,7 @@ import webhookRoutes from "./routes/webhook.js";
 import apiRoutes from "./routes/disparo.js";
 import testRoutes from "./routes/test.js";
 import dashboardRoutes from "./routes/dashboard.js";
+import instanciasRoutes from "./routes/instancias.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use("/webhook", webhookRoutes);
 app.use("/api", apiRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/instancias", instanciasRoutes);
 
 // Handler de erros
 app.use((err, _req, res, _next) => {

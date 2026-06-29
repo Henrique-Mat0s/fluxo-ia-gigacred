@@ -35,6 +35,8 @@ router.post("/evolution", async (req, res) => {
     }
 
     const msg = body.data;
+    // Evolution multi-instância: payload tem qual instância recebeu
+    const instanciaNome = body.instance || body.instanceName || null;
 
     // Ignora mensagens do próprio bot (fromMe = true)
     if (msg.key?.fromMe) {
@@ -53,14 +55,13 @@ router.post("/evolution", async (req, res) => {
       return res.json({ ignorado: true, motivo: "sem_telefone_ou_texto" });
     }
 
-    // Processa (IA Giovanna responde)
-    const r = await processarMensagem({ telefone, nome, texto });
+    // Processa (IA Giovanna responde) — passa instância pra a resposta sair pelo mesmo chip
+    const r = await processarMensagem({ telefone, nome, texto, instanciaNome });
 
-    // Envia resposta de volta via Evolution
+    // Envia resposta de volta via Evolution pela MESMA instância
     if (r.reply) {
-      // Delay aleatório 1-3s pra parecer humano digitando
       const delayMs = 1000 + Math.floor(Math.random() * 2000);
-      await enviarTexto(telefone, r.reply, { delayMs });
+      await enviarTexto(telefone, r.reply, { delayMs, instance: instanciaNome });
     }
 
     res.json({

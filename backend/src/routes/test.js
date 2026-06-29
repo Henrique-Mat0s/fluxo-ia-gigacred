@@ -2,7 +2,7 @@
 // Servem pro painel ter um "playground" da Giovanna.
 
 import { Router } from "express";
-import { chamarGiovanna } from "../ia/gemini.js";
+import { chamarIA } from "../ia/gemini.js";
 import { getIAConfig } from "../db/supabase.js";
 
 const router = Router();
@@ -77,7 +77,7 @@ router.post("/conversa", async (req, res) => {
       return res.json(respostaMock(novaMensagem, historico));
     }
 
-    const r = await chamarGiovanna({
+    const r = await chamarIA({
       systemPrompt,
       contexto: `Histórico:\n${contexto}`,
       novaMensagem,

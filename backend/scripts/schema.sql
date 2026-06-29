@@ -76,7 +76,56 @@ create table if not exists ligacoes (
 );
 
 
--- 4. ia_config ---------------------------------------------------------
+-- 4. instancias --------------------------------------------------------
+-- Cada chip de WhatsApp conectado é uma instância da Evolution.
+-- Disparador faz rotação round-robin entre instâncias ativas.
+create table if not exists instancias (
+  id              uuid primary key default gen_random_uuid(),
+  nome            text not null unique,         -- ex: 'gigacred-bot-01'
+  numero          text,                          -- número conectado, ex: '5531987654321'
+  estado          text default 'desconhecido'    -- 'open' | 'connecting' | 'close' | 'desconhecido'
+                    check (estado in ('open','connecting','close','desconhecido')),
+  ativa           boolean default true,          -- se entra na rotação de disparo
+  ordem_disparo   integer default 0,             -- pra round-robin ordenado
+  observacao      text,                          -- 'chip novo, em aquecimento' etc
+
+  -- Limites individuais (sobrescreve .env se preenchido)
+  limite_dia      integer,
+
+  criado_em       timestamptz default now(),
+  ultima_msg_em   timestamptz
+);
+
+-- View de métricas por instância (mensagens hoje, bloqueios hoje)
+create or replace view instancias_status as
+select
+  i.id, i.nome, i.numero, i.estado, i.ativa, i.ordem_disparo,
+  i.limite_dia, i.observacao, i.criado_em,
+  coalesce((
+    select count(*) from mensagens m
+    where m.instancia_id = i.id
+      and m.autor = 'ia'
+      and m.criado_em >= current_date
+  ), 0) as mensagens_hoje,
+  coalesce((
+    select count(*) from leads l
+    where l.status = 'bloqueado'
+      and l.criado_em >= current_date
+      and exists (
+        select 1 from mensagens m
+        where m.lead_id = l.id and m.instancia_id = i.id
+      )
+  ), 0) as bloqueios_hoje
+from instancias i;
+
+-- FK opcional em mensagens (pra rastrear qual chip enviou)
+alter table mensagens
+  add column if not exists instancia_id uuid references instancias(id) on delete set null;
+
+create index if not exists idx_mensagens_instancia on mensagens(instancia_id) where instancia_id is not null;
+
+
+-- ia_config ------------------------------------------------------------
 -- Linha única (id=1) que o painel edita: prompt, toggle ativa/pausada
 create table if not exists ia_config (
   id              integer primary key default 1 check (id = 1),
@@ -121,7 +170,7 @@ FORMATO DE SAÍDA (JSON estrito):
 on conflict (id) do nothing;
 
 
--- 5. View: leads_dashboard (atalho pro painel) -------------------------
+-- View: leads_dashboard (atalho pro painel) ----------------------------
 create or replace view leads_dashboard as
 select
   l.id, l.nome, l.telefone, l.produto, l.score, l.status, l.resumo_ia,

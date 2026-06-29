@@ -4,18 +4,28 @@ import {
   findLeadByTelefone, createLead, updateLead,
   getUltimasMensagens, insertMensagem, getIAConfig,
 } from "../db/supabase.js";
-import { chamarGiovanna } from "../ia/gemini.js";
+import { getInstanciaPorNome } from "../db/instancias.js";
+import { chamarIA } from "../ia/gemini.js";
 
 /**
  * Processa uma mensagem que chegou pelo webhook da Evolution.
  *
  * @param {object} msg
- * @param {string} msg.telefone   - número do lead (E.164, sem +)
- * @param {string} msg.nome       - nome (se a Evolution passar)
- * @param {string} msg.texto      - texto da mensagem
- * @returns {Promise<{reply: string, score: number, acao: string}>}
+ * @param {string} msg.telefone        - número do lead (E.164, sem +)
+ * @param {string} msg.nome            - nome (se a Evolution passar)
+ * @param {string} msg.texto           - texto da mensagem
+ * @param {string} [msg.instanciaNome] - qual chip recebeu (multi-instância)
  */
 export async function processarMensagem(msg) {
+  // Resolve instancia_id pra registrar nas mensagens (best-effort)
+  let instanciaId = null;
+  if (msg.instanciaNome) {
+    try {
+      const inst = await getInstanciaPorNome(msg.instanciaNome);
+      instanciaId = inst?.id || null;
+    } catch { /* ignora */ }
+  }
+
   // 1. Acha ou cria o lead
   let lead = await findLeadByTelefone(msg.telefone);
   if (!lead) {
@@ -36,6 +46,7 @@ export async function processarMensagem(msg) {
     lead_id: lead.id,
     autor: "lead",
     texto: msg.texto,
+    instancia_id: instanciaId,
   });
 
   // 3. Verifica se a IA está ativa
@@ -49,7 +60,7 @@ export async function processarMensagem(msg) {
   const contexto = montarContexto(lead, historico.reverse());
 
   // 5. Chama a Giovanna
-  const r = await chamarGiovanna({
+  const r = await chamarIA({
     systemPrompt: config.system_prompt,
     contexto,
     novaMensagem: msg.texto,
@@ -65,6 +76,7 @@ export async function processarMensagem(msg) {
       tokens_in: r._meta.tokens_in,
       tokens_out: r._meta.tokens_out,
       latency_ms: r._meta.latency_ms,
+      instancia_id: instanciaId,
     });
   }
 

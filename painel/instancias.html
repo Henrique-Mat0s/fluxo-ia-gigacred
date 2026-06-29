@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instâncias · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html">IA Trabalhando</a>
+    <a href="ligar.html">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="instancias.html" class="active">Chips</a>
+    <a href="testar.html">Testar Giovanna</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="config.html">Config</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>Chips de WhatsApp</h1>
+  <div class="sub">
+    Todas as instâncias conectadas — disparador faz rotação automática entre as ativas
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Resumo geral -->
+  <div class="card">
+    <div class="instancias-resumo" id="resumo">
+      <div class="resumo-item">
+        <div class="label">Chips conectados</div>
+        <div class="value" id="r-conectados">—</div>
+      </div>
+      <div class="resumo-item">
+        <div class="label">Mensagens hoje (total)</div>
+        <div class="value" id="r-mensagens">—</div>
+      </div>
+      <div class="resumo-item">
+        <div class="label">Capacidade restante hoje</div>
+        <div class="value" id="r-capacidade">—</div>
+      </div>
+      <div class="resumo-item">
+        <div class="label">Bloqueios hoje</div>
+        <div class="value" id="r-bloqueios">—</div>
+      </div>
+    </div>
+    <div class="actions-row" style="margin-top: 14px;">
+      <button class="btn" id="btn-novo">+ Adicionar novo chip</button>
+    </div>
+  </div>
+
+  <!-- Lista de instâncias -->
+  <div id="lista-instancias" class="instancias-grid">
+    <div class="empty">Carregando instâncias...</div>
+  </div>
+
+</div>
+
+<!-- Modal: criar nova instância -->
+<div id="modal-novo" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Adicionar novo chip</h2>
+    <p class="hint">
+      Dá um nome único pra essa instância (ex: <code>gigacred-bot-02</code>).
+      Depois você vai escanear o QR code com o WhatsApp do chip novo.
+    </p>
+    <div class="form-row">
+      <label>Nome (sem espaços, só minúsculas, números e hífen)</label>
+      <input type="text" id="novo-nome" placeholder="gigacred-bot-02" autocomplete="off">
+    </div>
+    <div class="form-row">
+      <label>Observação (opcional)</label>
+      <input type="text" id="novo-obs" placeholder="ex: chip 21 - aquecimento" autocomplete="off">
+    </div>
+    <div class="actions-row">
+      <button class="btn" id="btn-criar">Criar e gerar QR</button>
+      <button class="btn secondary" id="btn-cancelar">Cancelar</button>
+    </div>
+    <div id="novo-erro" class="msg-info erro" style="display:none; margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- Modal: QR code -->
+<div id="modal-qr" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Escaneie o QR Code</h2>
+    <p class="hint">
+      No celular onde está o chip novo, abra <b>WhatsApp → Configurações →
+      Aparelhos conectados → Conectar um aparelho</b> e escaneie o código abaixo.
+    </p>
+    <div id="qr-imagem" class="qr-container">Carregando QR...</div>
+    <div class="actions-row">
+      <button class="btn secondary" id="btn-fechar-qr">Fechar</button>
+      <button class="btn secondary" id="btn-atualizar-qr">Atualizar QR</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/instancias.js"></script>
+
+</body>
+</html>

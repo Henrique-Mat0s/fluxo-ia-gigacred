@@ -1,11 +1,10 @@
-// Disparador: pega leads com status='base', envia mensagem-isca com cadência
-// anti-ban, marca cada disparo. Roda em background até bater o limite diário
-// ou taxa de bloqueio crítica.
+// Disparador multi-instância: rotação round-robin entre os chips ativos.
 
 import {
   getLeadsParaDisparar, updateLead, insertMensagem,
   contarDisparosHoje, contarBloqueadosHoje,
 } from "../db/supabase.js";
+import { listarInstanciasAtivas } from "../db/instancias.js";
 import { enviarTexto, numeroExiste } from "../evolution/client.js";
 
 const VARIANTES = [
@@ -16,12 +15,11 @@ const VARIANTES = [
   "Oi! Sou a Giovanna. Trabalho com antecipação de FGTS — em 1-2 dias úteis o dinheiro cai no seu PIX. Te interessa saber quanto dá?",
 ];
 
-const LIMITE_DIA = parseInt(process.env.DISPARO_LIMITE_DIA || "150", 10);
+const LIMITE_DIA_GLOBAL = parseInt(process.env.DISPARO_LIMITE_DIA || "150", 10);
 const MIN_MS     = parseInt(process.env.DISPARO_MIN_INTERVALO_MS || "40000", 10);
 const MAX_MS     = parseInt(process.env.DISPARO_MAX_INTERVALO_MS || "90000", 10);
 const LIMITE_BLOQUEIO_PCT = parseFloat(process.env.DISPARO_LIMITE_BLOQUEIO_PCT || "5");
 
-// Estado em memória do disparo em curso (idempotente: 1 disparo por processo)
 let disparoEmCurso = false;
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -32,90 +30,128 @@ const variante = () => {
 };
 
 /**
- * Inicia um disparo (não-bloqueante).
- * Roda em background até bater limite ou estourar taxa de bloqueio.
- * @returns {object} status inicial
+ * Inicia disparo. Carrega instâncias ativas e distribui o lote entre elas
+ * em round-robin, respeitando o limite individual de cada chip.
  */
 export async function iniciarDisparo() {
   if (disparoEmCurso) {
     return { ok: false, erro: "Já existe um disparo em andamento." };
   }
 
-  // Quantos ainda dá pra disparar hoje?
-  const enviadosHoje = await contarDisparosHoje();
-  const restante = LIMITE_DIA - enviadosHoje;
-  if (restante <= 0) {
-    return { ok: false, erro: `Limite diário (${LIMITE_DIA}) já atingido.` };
+  // 1. Carrega instâncias ativas e conectadas
+  const todasInstancias = await listarInstanciasAtivas();
+  const instancias = todasInstancias.filter(i => i.estado === "open");
+  if (instancias.length === 0) {
+    return {
+      ok: false,
+      erro: "Nenhuma instância ativa e conectada. Vá em /instancias e conecte ao menos um chip.",
+      instancias_disponiveis: todasInstancias.length,
+    };
   }
 
-  // Pega leads da base
-  const leads = await getLeadsParaDisparar(restante);
+  // 2. Calcula capacidade restante por instância (limite individual ou global)
+  const capacidades = instancias.map(i => {
+    const limite = i.limite_dia || LIMITE_DIA_GLOBAL;
+    const restante = Math.max(0, limite - (i.mensagens_hoje || 0));
+    return { ...i, restante };
+  });
+  const capacidadeTotal = capacidades.reduce((s, c) => s + c.restante, 0);
+
+  if (capacidadeTotal === 0) {
+    return { ok: false, erro: "Todas as instâncias atingiram o limite diário." };
+  }
+
+  // 3. Pega leads da base, no máximo igual à capacidade total
+  const leads = await getLeadsParaDisparar(capacidadeTotal);
   if (leads.length === 0) {
-    return { ok: false, erro: "Nenhum lead na base com status='base' pra disparar." };
+    return { ok: false, erro: "Nenhum lead com status='base' pra disparar." };
   }
 
   disparoEmCurso = true;
-  // Roda em background — não aguarda
-  loopDisparo(leads).finally(() => { disparoEmCurso = false; });
+  loopDisparo(leads, capacidades).finally(() => { disparoEmCurso = false; });
 
   return {
     ok: true,
     iniciado: true,
     total_planejado: leads.length,
-    restante_dia: restante,
-    intervalo_estimado_min: Math.round(leads.length * (MIN_MS + MAX_MS) / 2 / 60000),
+    capacidade_total: capacidadeTotal,
+    instancias_usadas: capacidades.map(c => ({
+      nome: c.nome,
+      numero: c.numero,
+      restante: c.restante,
+    })),
+    intervalo_estimado_min: Math.round(leads.length * (MIN_MS + MAX_MS) / 2 / 60000 / capacidades.length),
   };
 }
 
-async function loopDisparo(leads) {
-  console.log(`[disparo] iniciando disparo de ${leads.length} leads`);
+async function loopDisparo(leads, capacidadesInicial) {
+  // Cópia local pra decrementar conforme avança
+  const capacidades = capacidadesInicial.map(c => ({ ...c }));
+  let rrIndex = 0;
+
+  console.log(`[disparo] iniciando: ${leads.length} leads x ${capacidades.length} instância(s)`);
 
   for (const lead of leads) {
-    // 1. Checa taxa de bloqueio (circuit breaker)
-    const enviadosHoje = await contarDisparosHoje();
-    const bloqueadosHoje = await contarBloqueadosHoje();
-    const pctBloqueio = enviadosHoje > 0 ? (bloqueadosHoje / enviadosHoje) * 100 : 0;
-    if (pctBloqueio >= LIMITE_BLOQUEIO_PCT && enviadosHoje >= 20) {
-      console.warn(`[disparo] PARANDO — taxa de bloqueio ${pctBloqueio.toFixed(1)}% acima do limite ${LIMITE_BLOQUEIO_PCT}%`);
+    // Escolhe próxima instância (round-robin) que ainda tem capacidade
+    let inst = null;
+    for (let tentativa = 0; tentativa < capacidades.length; tentativa++) {
+      const candidata = capacidades[rrIndex % capacidades.length];
+      rrIndex++;
+      if (candidata.restante > 0) {
+        inst = candidata;
+        break;
+      }
+    }
+    if (!inst) {
+      console.log("[disparo] todas as instâncias esgotaram capacidade — parando");
       break;
     }
 
-    // 2. Verifica se o número existe no WhatsApp
+    // Circuit breaker global (mantido como segurança extra)
+    const bloqueadosHoje = await contarBloqueadosHoje();
+    const enviadosHoje = await contarDisparosHoje();
+    const pctBloqueio = enviadosHoje > 0 ? (bloqueadosHoje / enviadosHoje) * 100 : 0;
+    if (pctBloqueio >= LIMITE_BLOQUEIO_PCT && enviadosHoje >= 20) {
+      console.warn(`[disparo] PARANDO — taxa de bloqueio ${pctBloqueio.toFixed(1)}%`);
+      break;
+    }
+
+    // Verifica se o número existe no WhatsApp (consulta via a instância escolhida)
     try {
-      const existe = await numeroExiste(lead.telefone);
+      const existe = await numeroExiste(lead.telefone, inst.nome);
       if (!existe) {
         await updateLead(lead.id, { status: "perdido", motivo: "numero_invalido" });
-        console.log(`[disparo] ${lead.telefone}: número não tem WhatsApp, pulando`);
+        console.log(`[disparo] ${lead.telefone}: número não tem WhatsApp`);
         continue;
       }
     } catch (e) {
-      console.warn(`[disparo] ${lead.telefone}: falha ao verificar número (continua mesmo assim)`, e.message);
+      console.warn(`[disparo] ${lead.telefone}: falha checar número`, e.message);
     }
 
-    // 3. Envia
+    // Envia
     const v = variante();
     try {
-      await enviarTexto(lead.telefone, v.texto);
+      await enviarTexto(lead.telefone, v.texto, { instance: inst.nome });
       await insertMensagem({
         lead_id: lead.id,
         autor: "ia",
         texto: v.texto,
         modelo: "isca_template",
+        instancia_id: inst.id,
       });
       await updateLead(lead.id, {
         status: "disparado",
         variante_isca: v.letra,
         ultima_msg_em: new Date().toISOString(),
       });
-      console.log(`[disparo] ${lead.telefone}: enviado (variante ${v.letra})`);
+      inst.restante--;
+      console.log(`[disparo] ${lead.telefone} via ${inst.nome} (variante ${v.letra}) — ${inst.restante} restantes nesse chip`);
     } catch (e) {
-      console.error(`[disparo] ${lead.telefone}: ERRO`, e.message);
-      // Não atualiza status — pode ser retentado depois
+      console.error(`[disparo] ${lead.telefone} via ${inst.nome}: ERRO`, e.message);
     }
 
-    // 4. Espera intervalo aleatório (anti-ban)
-    const espera = aleatorio(MIN_MS, MAX_MS);
-    await sleep(espera);
+    // Anti-ban: pausa entre mensagens
+    await sleep(aleatorio(MIN_MS, MAX_MS));
   }
 
   console.log("[disparo] finalizado");

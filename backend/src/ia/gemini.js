@@ -30,7 +30,7 @@ function initModel() {
  * Chama o Gemini com system prompt + histórico + mensagem nova.
  * Retorna { reply, qualificacao, _meta: { tokens_in, tokens_out, latency_ms } }
  */
-export async function chamarBia({ systemPrompt, contexto, novaMensagem }) {
+export async function chamarIA({ systemPrompt, contexto, novaMensagem }) {
   const m = initModel();
 
   const prompt = `${systemPrompt}
