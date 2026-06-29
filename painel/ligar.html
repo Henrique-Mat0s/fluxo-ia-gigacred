@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pra Ligar · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html">IA Trabalhando</a>
+    <a href="ligar.html" class="active">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="config.html">Configurações</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>Leads pra ligar agora</h1>
+  <div class="sub">
+    Qualificados pela IA · ordenados pelo mais antigo (lead esfriando)
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container">
+  <div id="lista-leads" class="leads-grid">
+    <div class="empty">Carregando leads...</div>
+  </div>
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/pra-ligar.js"></script>
+
+</body>
+</html>

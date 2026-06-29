@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configurações · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html">IA Trabalhando</a>
+    <a href="ligar.html">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="config.html" class="active">Configurações</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>Configurações da IA</h1>
+  <div class="sub">
+    Editar comportamento da Bia · controlar estado da Evolution
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Card 1: Status geral -->
+  <div class="card">
+    <h2>Status</h2>
+    <div class="status-row">
+      <div>
+        <div class="status-label">IA</div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-ia">
+          <span class="slider"></span>
+        </label>
+        <span id="ia-estado-texto" class="status-texto">—</span>
+      </div>
+      <div>
+        <div class="status-label">Evolution (WhatsApp)</div>
+        <div id="evolution-estado" class="status-texto">—</div>
+      </div>
+      <div>
+        <div class="status-label">Gemini (IA)</div>
+        <div id="gemini-uso" class="status-texto">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Prompt da IA -->
+  <div class="card">
+    <h2>Prompt da IA (Bia)</h2>
+    <p class="hint">
+      Aqui você controla EXATAMENTE como a Bia conversa. Mudar este texto = mudar o
+      comportamento da IA em todas as próximas conversas. Mensagens já em andamento
+      continuam usando a versão anterior até terminarem.
+    </p>
+    <textarea id="prompt-textarea" class="textarea-prompt"></textarea>
+    <div class="actions-row">
+      <button class="btn" id="btn-salvar-prompt">Salvar alterações</button>
+      <button class="btn secondary" id="btn-restaurar">Restaurar padrão</button>
+      <span id="salvo-msg" class="salvo-msg"></span>
+    </div>
+  </div>
+
+  <!-- Card 3: Conexão Evolution -->
+  <div class="card">
+    <h2>Conexão Evolution API</h2>
+    <div class="kv-grid cols-2">
+      <div class="kv">
+        <div class="label">Instância</div>
+        <div class="value" id="ev-instancia">—</div>
+      </div>
+      <div class="kv">
+        <div class="label">Número conectado</div>
+        <div class="value" id="ev-numero">—</div>
+      </div>
+      <div class="kv">
+        <div class="label">Mensagens hoje</div>
+        <div class="value" id="ev-msgs">—</div>
+      </div>
+      <div class="kv">
+        <div class="label">Taxa de bloqueio</div>
+        <div class="value" id="ev-bloqueio">—</div>
+      </div>
+    </div>
+    <div class="actions-row" style="margin-top: 14px;">
+      <button class="btn secondary" id="btn-reconectar">Reconectar (gerar novo QR)</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/config-ia.js"></script>
+
+</body>
+</html>

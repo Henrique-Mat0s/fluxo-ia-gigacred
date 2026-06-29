@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IA Trabalhando · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html" class="active">IA Trabalhando</a>
+    <a href="ligar.html">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="config.html">Configurações</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>IA Trabalhando agora</h1>
+  <div class="sub">
+    <span id="instancia-dot" class="dot"></span>
+    <span id="instancia-texto">Carregando status da Evolution...</span>
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container">
+  <div id="lista-conversas" class="conversas-stream">
+    <div class="empty">Carregando conversas...</div>
+  </div>
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/ia-trabalhando.js"></script>
+
+</body>
+</html>
