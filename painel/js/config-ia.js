@@ -2,7 +2,7 @@
 
 const $ = (sel) => document.querySelector(sel);
 
-const PROMPT_PADRAO = `Você é a Bia, consultora virtual da GIGACRED Correspondente.
+const PROMPT_PADRAO = `Você é a Giovanna, consultora virtual da GIGACRED Correspondente.
 Sua função é qualificar leads que querem antecipar FGTS, INSS ou consignado privado.
 
 REGRAS:

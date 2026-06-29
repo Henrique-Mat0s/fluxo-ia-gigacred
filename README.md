@@ -10,13 +10,13 @@
 |---|---|---|
 | `fluxo-ia-empresa.pdf` | Versão completa **genérica** — qualquer empresa. | 23 |
 | `fluxo-ia-empresa-simples.pdf` | Versão **simplificada** com 4 mockups embedados. | 12 |
-| **`fluxo-ia-gigacred.pdf`** | **Customizado pra GIGACRED**: prospecção ativa, plano de 7 dias pra gerar caixa, prompt da IA Bia, schema com campos do nicho FGTS, mockups verde GigaCred. | **20** |
+| **`fluxo-ia-gigacred.pdf`** | **Customizado pra GIGACRED**: prospecção ativa, plano de 7 dias pra gerar caixa, prompt da IA Giovanna, schema com campos do nicho FGTS, mockups verde GigaCred. | **20** |
 
 > **Comece pelo `fluxo-ia-gigacred.pdf`**, parte "Plano de 7 dias pra gerar caixa" — é a leitura prioritária.
 
 ## O fluxo, em uma frase
 
-> Base de contatos → Bot dispara mensagem-isca → Lead responde → IA Bia qualifica → CRM mostra ao closer → Closer liga, simula e libera no PIX.
+> Base de contatos → Bot dispara mensagem-isca → Lead responde → IA Giovanna qualifica → CRM mostra ao closer → Closer liga, simula e libera no PIX.
 
 ## Stack tecnológica (tudo grátis)
 
@@ -57,7 +57,7 @@ fluxo-ia-gigacred/
 │   └── 04_dashboard.png
 │
 ├── mockups-gigacred/               # PNGs das telas (versão GIGACRED)
-│   ├── 01_conversa.png             # conversa com bot + IA Bia
+│   ├── 01_conversa.png             # conversa com bot + IA Giovanna
 │   ├── 02_lista_leads.png          # leads qualificados pra ligar
 │   ├── 03_detalhe_lead.png         # detalhe + simulação de bancos
 │   ├── 04_dashboard.png            # painel com volume liberado
@@ -82,7 +82,7 @@ fluxo-ia-gigacred/
 1. **Imediato (Dia 1):** organizar a base de contatos (clientes antigos, leads de form, indicações).
 2. **Dia 2-3:** preparar chip WhatsApp dedicado + aquecimento.
 3. **Dia 3-5:** disparo manual com as 5 variantes da mensagem-isca (no PDF).
-4. **Dia 6-7:** subir o bot whatsapp-web.js + conectar IA Bia no Gemini Free.
+4. **Dia 6-7:** subir o bot whatsapp-web.js + conectar IA Giovanna no Gemini Free.
 5. **Semana 2+:** completar CRM no Retool, conectar notificação no Slack do closer.
 
 ## Regerar os PDFs

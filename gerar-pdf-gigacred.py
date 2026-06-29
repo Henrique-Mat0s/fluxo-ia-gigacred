@@ -192,7 +192,7 @@ pdf.cell(0, 6, "O fluxo, em uma frase:", align="C",
 pdf.ln(2)
 pdf.set_font("Arial", "", 11)
 pdf.set_text_color(0, 0, 0)
-fluxo = ("Base de contatos  →  Bot dispara mensagem-isca  →  Lead responde  →  IA Bia "
+fluxo = ("Base de contatos  →  Bot dispara mensagem-isca  →  Lead responde  →  IA Giovanna "
          "qualifica  →  CRM mostra ao closer  →  closer liga, simula e libera.")
 pdf.multi_cell(0, 5.5, fluxo, align="C", new_x="LMARGIN", new_y="NEXT")
 pdf.ln(35)
@@ -289,15 +289,15 @@ pdf.bullet([
     "Com receita entrando, agora vale investir tempo (não dinheiro — ainda "
     "custo zero) no bot. Subir whatsapp-web.js no Oracle Free.",
     "Bot dispara a isca automaticamente pros próximos 100 da base.",
-    "IA Bia ainda não — você assume manual as respostas. Só o disparo "
+    "IA Giovanna ainda não — você assume manual as respostas. Só o disparo "
     "vira automático.",
 ])
 
-pdf.h3("Dia 7 — Conectar a IA Bia")
+pdf.h3("Dia 7 — Conectar a IA Giovanna")
 pdf.bullet([
     "Criar conta Google AI Studio (custo zero), pegar API key Gemini.",
-    "Configurar prompt da Bia (template pronto na Parte 3 deste doc).",
-    "Bia agora responde automaticamente; você só pega quando ela passa o lead.",
+    "Configurar prompt da Giovanna (template pronto na Parte 3 deste doc).",
+    "Giovanna agora responde automaticamente; você só pega quando ela passa o lead.",
     "A partir daí, o fluxo roda sozinho enquanto você dorme.",
 ])
 
@@ -394,8 +394,8 @@ pdf.code("""
           │  lead respondeu? sim →
           ▼
    ┌──────────────┐
-   │  PASSO 2     │   IA Bia ASSUME a conversa
-   │  IA Bia (SDR)│   imediatamente que o lead responde
+   │  PASSO 2     │   IA Giovanna ASSUME a conversa
+   │  IA Giovanna (SDR)│   imediatamente que o lead responde
    └──────┬───────┘
           │
           ▼
@@ -484,16 +484,16 @@ pdf.bullet([
 
 pdf.h2("5 variantes da mensagem-isca (exemplo pronto)")
 pdf.code("""Variante A:
-"Oi! Tudo bem? Aqui é a Bia da GIGACRED. Você sabia que dá pra
+"Oi! Tudo bem? Aqui é a Giovanna da GIGACRED. Você sabia que dá pra
 antecipar até 7 anos do seu saque-aniversário do FGTS e receber
 tudo no PIX?"
 
 Variante B:
-"Olá! Sou a Bia, consultora da GIGACRED. Posso te mandar uma
+"Olá! Sou a Giovanna, consultora da GIGACRED. Posso te mandar uma
 simulação rápida de quanto dá pra antecipar do seu FGTS?"
 
 Variante C:
-"Oi, tudo bem? Bia aqui da GIGACRED. Tem alguns minutos pra eu
+"Oi, tudo bem? Giovanna aqui da GIGACRED. Tem alguns minutos pra eu
 te explicar como antecipar o FGTS sem complicação?"
 
 Variante D:
@@ -501,7 +501,7 @@ Variante D:
 agora, sem esperar o aniversário? Quer simular sem compromisso?"
 
 Variante E:
-"Oi! Sou a Bia. Trabalho com antecipação de FGTS — em 1-2 dias
+"Oi! Sou a Giovanna. Trabalho com antecipação de FGTS — em 1-2 dias
 úteis o dinheiro cai no seu PIX. Te interessa saber quanto dá?\"""")
 
 pdf.h2("Cálculo do volume seguro (1 chip)")
@@ -525,10 +525,10 @@ pdf.callout(
 # PASSO 2 — IA ASSUME NA HORA
 # =====================================================================
 pdf.pb()
-pdf.step_header(2, "Lead responde — IA Bia assume na hora")
+pdf.step_header(2, "Lead responde — IA Giovanna assume na hora")
 
 pdf.p("Assim que o lead responde QUALQUER coisa (\"sim\", \"o que é isso?\", "
-      "\"quanto?\", \"para de me mandar mensagem\"), a IA Bia entra em ação "
+      "\"quanto?\", \"para de me mandar mensagem\"), a IA Giovanna entra em ação "
       "em segundos. Ela analisa a resposta e decide o que fazer:")
 pdf.bullet([
     "Lead interessado → começa a qualificar (BANT adaptado).",
@@ -550,19 +550,19 @@ pdf.image_full(MOCKUPS / "01_conversa.png",
 # PASSO 3 — IA BIA
 # =====================================================================
 pdf.pb()
-pdf.step_header(3, "A IA Bia qualifica via diálogo")
+pdf.step_header(3, "A IA Giovanna qualifica via diálogo")
 
-pdf.p("A IA Bia é um prompt rodando no Gemini 1.5 Flash (gratuito até 1500 "
+pdf.p("A IA Giovanna é um prompt rodando no Gemini 1.5 Flash (gratuito até 1500 "
       "chamadas/dia). Para cada mensagem que chega, o CRM faz uma chamada à "
       "API do Gemini com:")
 pdf.bullet([
-    "Quem é a Bia: consultora virtual da GIGACRED, tom caloroso e direto.",
+    "Quem é a Giovanna: consultora virtual da GIGACRED, tom caloroso e direto.",
     "O que a GIGACRED faz: correspondente de FGTS, INSS, Privado, bancos parceiros.",
     "Histórico das últimas mensagens da conversa.",
     "A nova mensagem do lead.",
 ])
 
-pdf.h2("As 5 informações que a Bia DEVE descobrir")
+pdf.h2("As 5 informações que a Giovanna DEVE descobrir")
 pdf.bullet([
     "Saldo FGTS estimado (o lead geralmente sabe de cabeça).",
     "Se já fez adesão ao Saque-Aniversário na Caixa (sem isso, NÃO dá pra "
@@ -582,8 +582,8 @@ pdf.bullet([
 pdf.p("Score ≥ 80 → handoff imediato pro closer. Entre 60-79 → continua "
       "qualificando ou agenda follow-up. Abaixo de 60 → park educado.")
 
-pdf.h2("Exemplo do prompt da Bia (trecho)")
-pdf.code("""Você é a Bia, consultora virtual da GIGACRED Correspondente.
+pdf.h2("Exemplo do prompt da Giovanna (trecho)")
+pdf.code("""Você é a Giovanna, consultora virtual da GIGACRED Correspondente.
 Sua função é qualificar leads que querem antecipar FGTS, INSS ou
 consignado privado. Você NÃO simula valores definitivos, NÃO fecha
 contrato, NÃO promete taxa — isso é função do closer humano.
@@ -611,7 +611,7 @@ O QUE DESCOBRIR (BANT adaptado):
 pdf.pb()
 pdf.step_header(4, "IA passa o lead para a plataforma")
 
-pdf.p("Score chegou em 80+? A IA Bia faz 3 coisas:")
+pdf.p("Score chegou em 80+? A IA Giovanna faz 3 coisas:")
 pdf.bullet([
     "Escreve um resumo de 3 linhas com tudo que o closer precisa.",
     "Recomenda os 3 bancos com melhor taxa pro perfil (BMG, Daycoval, C6 ou Pan).",
@@ -626,13 +626,13 @@ pdf.image_full(MOCKUPS / "02_lista_leads.png",
                        "com produto, valor estimado, score, motivo. Total estimado do dia "
                        "já calculado no topo. Closer escolhe o de maior score e clica em 'Ligar'.")
 
-pdf.h2("O resumo que a Bia escreve (formato padronizado)")
+pdf.h2("O resumo que a Giovanna escreve (formato padronizado)")
 pdf.code('''"José, 34, CLT, quer antecipar FGTS — URGENTE.
  Saldo ~R$ 8k, já fez adesão. Motivo: quitar dívida.
  Expectativa: R$ 4,5-5,2k no PIX em 1-2 dias.
  Recomendado: simular BMG ou Daycoval."''')
 
-pdf.p("Esse formato é definido no prompt — a Bia sempre escreve no mesmo "
+pdf.p("Esse formato é definido no prompt — a Giovanna sempre escreve no mesmo "
       "padrão (perfil + saldo + adesão + motivo + valor estimado + banco "
       "recomendado). O closer lê em 10 segundos e já sabe o que falar.")
 
@@ -852,9 +852,9 @@ pdf.bullet([
 pdf.h2("Para o Banco Central (regulação de correspondente)")
 pdf.bullet([
     "Correspondente NÃO pode prometer aprovação ('garanto que aprovam'). "
-    "O prompt da Bia deve evitar essa linguagem — sempre usar 'estimado', "
+    "O prompt da Giovanna deve evitar essa linguagem — sempre usar 'estimado', "
     "'simulação inicial', 'depende da análise do banco'.",
-    "Não pode aplicar taxa diferente da informada pelo banco — a Bia NUNCA "
+    "Não pode aplicar taxa diferente da informada pelo banco — a Giovanna NUNCA "
     "diz taxa específica, isso fica com o closer (que olha a tabela atualizada).",
     "Não pode oferecer 'dinheiro na hora' (publicidade enganosa). FGTS sai "
     "em 1-2 dias úteis e isso deve ser dito sempre.",
@@ -877,12 +877,12 @@ pdf.bullet([
     "Testar endpoint POST /api/mensagem-recebida com Postman.",
 ])
 
-pdf.h3("Semana 2 — Bot WhatsApp + IA Bia v1")
+pdf.h3("Semana 2 — Bot WhatsApp + IA Giovanna v1")
 pdf.bullet([
     "Pegar um chip dedicado (R$ 10) para o número de WhatsApp da operação IA. "
     "Não usar o número pessoal do dono.",
     "Implementar bot whatsapp-web.js conectado ao backend.",
-    "Implementar prompt da Bia no Gemini, focado em FGTS no início.",
+    "Implementar prompt da Giovanna no Gemini, focado em FGTS no início.",
     "Testar com 10 conversas simuladas (você simula o lead).",
 ])
 
@@ -899,8 +899,8 @@ pdf.h3("Semana 4 — Piloto e ajustes")
 pdf.bullet([
     "Ligar o anúncio do Instagram apontando para o WhatsApp da IA.",
     "Acompanhar 20-30 leads reais, ler todos os transcripts, anotar onde a "
-    "Bia errou (não perguntou X, perguntou de forma confusa, etc).",
-    "Ajustar prompt da Bia 2-3 vezes com base nos erros reais.",
+    "Giovanna errou (não perguntou X, perguntou de forma confusa, etc).",
+    "Ajustar prompt da Giovanna 2-3 vezes com base nos erros reais.",
     "Estender prompt pra cobrir Consignado INSS e Privado também.",
     "Lançar oficial.",
 ])
@@ -918,7 +918,7 @@ pdf.h2("Sinais de sucesso aos 30 dias")
 pdf.bullet([
     "Closer dizendo: 'estou ligando pra menos leads, mas fechando mais'.",
     "Volume liberado crescente sem aumentar custo de Ads proporcionalmente.",
-    "Bia respondendo lead da madrugada (que antes ficava sem resposta) "
+    "Giovanna respondendo lead da madrugada (que antes ficava sem resposta) "
     "e esse lead fechando no dia seguinte.",
     "Você (dono) abrindo o painel pela manhã e sabendo em 30 segundos "
     "como foi o dia anterior.",

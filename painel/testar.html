@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testar Giovanna · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html">IA Trabalhando</a>
+    <a href="ligar.html">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="testar.html" class="active">Testar Giovanna</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="config.html">Config</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>Testar a Giovanna (sem WhatsApp)</h1>
+  <div class="sub">
+    Converse com a Giovanna como se fosse um lead. Útil pra calibrar o prompt antes de soltar pra clientes reais.
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container teste-container">
+  <div class="teste-info">
+    <div class="info-card">
+      <div class="kv">
+        <div class="label">Score atual da conversa</div>
+        <div class="value" id="score-atual">0</div>
+      </div>
+      <div class="kv">
+        <div class="label">Ação recomendada</div>
+        <div class="value" id="acao-atual">—</div>
+      </div>
+      <div class="kv">
+        <div class="label">Turnos</div>
+        <div class="value" id="turnos">0</div>
+      </div>
+      <div class="kv">
+        <div class="label">Última latência</div>
+        <div class="value" id="latencia">—</div>
+      </div>
+    </div>
+    <div class="actions-row">
+      <button class="btn secondary" id="btn-reset">Resetar conversa</button>
+      <button class="btn secondary" id="btn-cenarios">▾ Cenários prontos</button>
+    </div>
+    <div class="cenarios-menu" id="cenarios-menu" style="display:none;">
+      <button data-cenario="quente">Lead QUENTE (saldo alto, urgência)</button>
+      <button data-cenario="frio">Lead FRIO (sem adesão, sem dor)</button>
+      <button data-cenario="confuso">Lead CONFUSO (não sabe o que quer)</button>
+      <button data-cenario="agressivo">Lead AGRESSIVO (pede pra parar)</button>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <div class="avatar">B</div>
+      <div>
+        <div class="lead-name">Giovanna (IA SDR)</div>
+        <div class="lead-channel">Simulação de teste · sem persistência</div>
+      </div>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="msg-info">Mande uma mensagem pra começar. Digite como se fosse um lead.</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="input-msg" placeholder="Digite uma mensagem como se fosse o lead..." autocomplete="off">
+      <button class="btn" id="btn-enviar">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/testar.js"></script>
+
+</body>
+</html>

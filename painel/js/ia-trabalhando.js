@@ -86,11 +86,11 @@ function renderConversa(c) {
           </div>` : ""}
         ${isDigitando ? `
           <div class="msg msg-ia digitando">
-            <div class="msg-label">Bia (IA)</div>
+            <div class="msg-label">Giovanna (IA)</div>
             <div class="msg-text"><span class="dot-typing"></span><span class="dot-typing"></span><span class="dot-typing"></span> digitando resposta...</div>
           </div>` : (c.ultima_msg_ia ? `
           <div class="msg msg-ia">
-            <div class="msg-label">Bia (IA)</div>
+            <div class="msg-label">Giovanna (IA)</div>
             <div class="msg-text">"${c.ultima_msg_ia}"</div>
           </div>` : "")}
       </div>

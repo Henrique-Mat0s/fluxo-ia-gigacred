@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · GIGACRED</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">GIGA<span class="accent">CRED</span> · Painel</div>
+  <nav class="nav">
+    <a href="index.html">IA Trabalhando</a>
+    <a href="ligar.html">Pra Ligar (<span id="badge-ligar">0</span>)</a>
+    <a href="testar.html">Testar Giovanna</a>
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="config.html">Config</a>
+  </nav>
+  <div class="user-box">João Closer</div>
+</header>
+
+<div class="subheader">
+  <h1>Painel de hoje</h1>
+  <div class="sub">
+    Visão consolidada da operação · atualiza a cada 30s
+    <span class="badge-data-source" id="badge-fonte"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPIs principais -->
+  <div class="kpi-grid" id="kpis">
+    <div class="empty">Carregando métricas...</div>
+  </div>
+
+  <!-- Funil -->
+  <div class="card">
+    <h2>Funil do dia</h2>
+    <div class="funil" id="funil"></div>
+  </div>
+
+  <div class="dash-row">
+    <!-- Produtos -->
+    <div class="card">
+      <h2>Leads por produto (30 dias)</h2>
+      <div class="bar-list" id="por-produto"></div>
+    </div>
+
+    <!-- Bancos -->
+    <div class="card">
+      <h2>Volume liberado por banco (30 dias)</h2>
+      <div class="bar-list" id="por-banco"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/data-source.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

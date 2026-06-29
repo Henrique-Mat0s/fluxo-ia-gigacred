@@ -21,7 +21,7 @@ const MOCK_DATA = {
     api_key_configurada: true,
     requisicoes_hoje: 412,
     limite_dia: 1500,
-    system_prompt: `Você é a Bia, consultora virtual da GIGACRED Correspondente.
+    system_prompt: `Você é a Giovanna, consultora virtual da GIGACRED Correspondente.
 Sua função é qualificar leads que querem antecipar FGTS, INSS ou consignado privado.
 
 REGRAS:

@@ -1,0 +1,23 @@
+{
+  "name": "fluxo-ia-gigacred-backend",
+  "version": "0.1.0",
+  "description": "Backend Express que recebe webhook da Evolution, qualifica via Gemini e dispara base.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "importar-base": "node scripts/importar-base.js",
+    "test:gemini": "node scripts/test-gemini.js",
+    "test:webhook": "node scripts/test-webhook.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0"
+  },
+  "license": "ISC"
+}

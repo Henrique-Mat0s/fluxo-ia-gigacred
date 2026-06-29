@@ -94,7 +94,7 @@ def mockup_conversa():
 
     y = 95
     # Bot dispara mensagem-isca (out = verde) — captação ativa
-    y = bubble(y, "Oi! Tudo bem? Aqui é a Bia da GIGACRED. "
+    y = bubble(y, "Oi! Tudo bem? Aqui é a Giovanna da GIGACRED. "
                   "Você sabia que dá pra antecipar até 7 anos do seu "
                   "saque-aniversário do FGTS e receber tudo no PIX?",
                is_out=True, time="14:20")
